@@ -121,7 +121,8 @@ class TestDimensionSet:
         )
         dim_set.add(dim)
 
-        assert dim_set.remove(dim.id)
+        result = dim_set.remove(dim.id)
+        assert result
         assert dim_set.get(dim.id) is None
 
     def test_get_for_entity(self) -> None:
