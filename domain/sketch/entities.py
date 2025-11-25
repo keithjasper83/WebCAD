@@ -12,6 +12,7 @@ This module contains pure domain entities:
 
 from __future__ import annotations
 
+import math
 import uuid
 from dataclasses import dataclass, field
 from typing import Any
@@ -124,14 +125,10 @@ class Circle(Curve):
 
     def circumference(self) -> float:
         """Calculate the circumference of the circle."""
-        import math
-
         return 2 * math.pi * self.radius
 
     def area(self) -> float:
         """Calculate the area of the circle."""
-        import math
-
         return math.pi * self.radius**2
 
     def to_dict(self) -> dict[str, Any]:
@@ -172,8 +169,6 @@ class Arc(Curve):
 
     def start_point(self) -> Point2D:
         """Calculate the starting point of the arc."""
-        import math
-
         return Point2D(
             self.center.x + self.radius * math.cos(self.start_angle),
             self.center.y + self.radius * math.sin(self.start_angle),
@@ -181,8 +176,6 @@ class Arc(Curve):
 
     def end_point(self) -> Point2D:
         """Calculate the ending point of the arc."""
-        import math
-
         return Point2D(
             self.center.x + self.radius * math.cos(self.end_angle),
             self.center.y + self.radius * math.sin(self.end_angle),

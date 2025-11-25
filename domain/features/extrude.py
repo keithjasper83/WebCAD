@@ -8,13 +8,14 @@ along a specified direction.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from enum import Enum
 from typing import Any
 
 from domain.features.base import Feature, FeatureType, OperationType
 
 
-class ExtrudeDirection:
-    """Constants for extrusion direction."""
+class ExtrudeDirection(Enum):
+    """Direction options for extrusion."""
 
     POSITIVE = "positive"  # Extrude in positive normal direction
     NEGATIVE = "negative"  # Extrude in negative normal direction
@@ -37,7 +38,7 @@ class ExtrudeFeature(Feature):
     """
 
     depth: float = 10.0
-    direction: str = ExtrudeDirection.POSITIVE
+    direction: str = ExtrudeDirection.POSITIVE.value
     operation: OperationType = OperationType.NEW_BODY
     taper_angle: float = 0.0
     feature_type: FeatureType = field(default=FeatureType.EXTRUDE, init=False)
@@ -65,11 +66,8 @@ class ExtrudeFeature(Feature):
         if self.depth <= 0:
             errors.append(f"Extrude depth must be positive, got {self.depth}")
 
-        if self.direction not in (
-            ExtrudeDirection.POSITIVE,
-            ExtrudeDirection.NEGATIVE,
-            ExtrudeDirection.SYMMETRIC,
-        ):
+        valid_directions = [d.value for d in ExtrudeDirection]
+        if self.direction not in valid_directions:
             errors.append(f"Invalid extrude direction: {self.direction}")
 
         if not self.sketch_id:
@@ -87,9 +85,9 @@ class ExtrudeFeature(Feature):
         Returns:
             Tuple of (depth1, depth2) for start and end depths
         """
-        if self.direction == ExtrudeDirection.POSITIVE:
+        if self.direction == ExtrudeDirection.POSITIVE.value:
             return 0.0, self.depth
-        elif self.direction == ExtrudeDirection.NEGATIVE:
+        elif self.direction == ExtrudeDirection.NEGATIVE.value:
             return -self.depth, 0.0
         else:  # SYMMETRIC
             half = self.depth / 2

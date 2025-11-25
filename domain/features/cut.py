@@ -7,13 +7,14 @@ A cut removes material from a solid body using a sketch profile.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from enum import Enum
 from typing import Any
 
 from domain.features.base import Feature, FeatureType
 
 
-class CutType:
-    """Constants for cut types."""
+class CutType(Enum):
+    """Types of cut operations."""
 
     THROUGH_ALL = "through_all"  # Cut through entire body
     BLIND = "blind"  # Cut to a specified depth
@@ -35,7 +36,7 @@ class CutFeature(Feature):
     """
 
     depth: float = 10.0
-    cut_type: str = CutType.BLIND
+    cut_type: str = CutType.BLIND.value
     reverse_direction: bool = False
     feature_type: FeatureType = field(default=FeatureType.CUT, init=False)
 
@@ -57,13 +58,14 @@ class CutFeature(Feature):
         """
         errors = []
 
-        if self.cut_type == CutType.BLIND and self.depth <= 0:
+        if self.cut_type == CutType.BLIND.value and self.depth <= 0:
             errors.append(f"Cut depth must be positive for blind cuts, got {self.depth}")
 
         if not self.sketch_id:
             errors.append("Cut feature requires a sketch_id")
 
-        if self.cut_type not in (CutType.THROUGH_ALL, CutType.BLIND, CutType.TO_FACE):
+        valid_cut_types = [c.value for c in CutType]
+        if self.cut_type not in valid_cut_types:
             errors.append(f"Invalid cut type: {self.cut_type}")
 
         return len(errors) == 0, errors

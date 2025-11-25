@@ -18,7 +18,7 @@ class TestExtrudeFeature:
         extrude = ExtrudeFeature(
             sketch_id="sketch1",
             depth=10.0,
-            direction=ExtrudeDirection.POSITIVE,
+            direction=ExtrudeDirection.POSITIVE.value,
             operation=OperationType.NEW_BODY,
         )
         assert extrude.feature_type == FeatureType.EXTRUDE
@@ -57,7 +57,7 @@ class TestExtrudeFeature:
         extrude = ExtrudeFeature(
             sketch_id="sketch1",
             depth=10.0,
-            direction=ExtrudeDirection.POSITIVE,
+            direction=ExtrudeDirection.POSITIVE.value,
         )
         d1, d2 = extrude.get_effective_depths()
         assert d1 == 0.0
@@ -68,7 +68,7 @@ class TestExtrudeFeature:
         extrude = ExtrudeFeature(
             sketch_id="sketch1",
             depth=10.0,
-            direction=ExtrudeDirection.NEGATIVE,
+            direction=ExtrudeDirection.NEGATIVE.value,
         )
         d1, d2 = extrude.get_effective_depths()
         assert d1 == -10.0
@@ -79,7 +79,7 @@ class TestExtrudeFeature:
         extrude = ExtrudeFeature(
             sketch_id="sketch1",
             depth=10.0,
-            direction=ExtrudeDirection.SYMMETRIC,
+            direction=ExtrudeDirection.SYMMETRIC.value,
         )
         d1, d2 = extrude.get_effective_depths()
         assert d1 == -5.0
@@ -150,18 +150,18 @@ class TestCutFeature:
         cut = CutFeature(
             sketch_id="sketch1",
             depth=5.0,
-            cut_type=CutType.BLIND,
+            cut_type=CutType.BLIND.value,
         )
         assert cut.feature_type == FeatureType.CUT
         assert cut.depth == 5.0
-        assert cut.cut_type == CutType.BLIND
+        assert cut.cut_type == CutType.BLIND.value
 
     def test_cut_validation(self) -> None:
         """Test cut validation."""
         cut = CutFeature(
             sketch_id="sketch1",
             depth=5.0,
-            cut_type=CutType.BLIND,
+            cut_type=CutType.BLIND.value,
         )
         valid, errors = cut.validate()
         assert valid
@@ -170,7 +170,7 @@ class TestCutFeature:
         """Test through all cut."""
         cut = CutFeature(
             sketch_id="sketch1",
-            cut_type=CutType.THROUGH_ALL,
+            cut_type=CutType.THROUGH_ALL.value,
         )
         valid, errors = cut.validate()
         assert valid
@@ -213,7 +213,7 @@ class TestHoleFeature:
         hole = HoleFeature(
             diameter=5.0,
             depth=10.0,
-            hole_type=HoleType.COUNTERBORE,
+            hole_type=HoleType.COUNTERBORE.value,
             counterbore_diameter=10.0,
             counterbore_depth=3.0,
         )
@@ -225,7 +225,7 @@ class TestHoleFeature:
         hole = HoleFeature(
             diameter=10.0,
             depth=10.0,
-            hole_type=HoleType.COUNTERBORE,
+            hole_type=HoleType.COUNTERBORE.value,
             counterbore_diameter=5.0,  # Smaller than hole
             counterbore_depth=3.0,
         )

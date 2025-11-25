@@ -7,13 +7,14 @@ A hole creates a cylindrical pocket or through-hole in a solid body.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from enum import Enum
 from typing import Any
 
 from domain.features.base import Feature, FeatureType
 
 
-class HoleType:
-    """Constants for hole types."""
+class HoleType(Enum):
+    """Types of holes."""
 
     SIMPLE = "simple"  # Simple cylindrical hole
     COUNTERBORE = "counterbore"  # Hole with counterbore
@@ -21,8 +22,8 @@ class HoleType:
     THREADED = "threaded"  # Threaded hole
 
 
-class HoleTermination:
-    """Constants for hole termination types."""
+class HoleTermination(Enum):
+    """Hole termination types."""
 
     THROUGH_ALL = "through_all"  # Hole goes through entire body
     BLIND = "blind"  # Hole stops at specified depth
@@ -48,8 +49,8 @@ class HoleFeature(Feature):
 
     diameter: float = 5.0
     depth: float = 10.0
-    hole_type: str = HoleType.SIMPLE
-    termination: str = HoleTermination.BLIND
+    hole_type: str = HoleType.SIMPLE.value
+    termination: str = HoleTermination.BLIND.value
     position_x: float = 0.0
     position_y: float = 0.0
     counterbore_diameter: float = 0.0
@@ -84,10 +85,10 @@ class HoleFeature(Feature):
         if self.diameter <= 0:
             errors.append(f"Hole diameter must be positive, got {self.diameter}")
 
-        if self.termination == HoleTermination.BLIND and self.depth <= 0:
+        if self.termination == HoleTermination.BLIND.value and self.depth <= 0:
             errors.append(f"Hole depth must be positive for blind holes, got {self.depth}")
 
-        if self.hole_type == HoleType.COUNTERBORE:
+        if self.hole_type == HoleType.COUNTERBORE.value:
             if self.counterbore_diameter <= self.diameter:
                 errors.append(
                     f"Counterbore diameter ({self.counterbore_diameter}) must be larger "
@@ -98,7 +99,7 @@ class HoleFeature(Feature):
                     f"Counterbore depth must be positive, got {self.counterbore_depth}"
                 )
 
-        if self.hole_type == HoleType.COUNTERSINK:
+        if self.hole_type == HoleType.COUNTERSINK.value:
             if not (0 < self.countersink_angle < 180):
                 errors.append(
                     f"Countersink angle must be between 0 and 180 degrees, "
